@@ -183,9 +183,9 @@ class VRButton{
         element.style.position = 'absolute';
         element.style.bottom = '20px';
         if (!ignorePadding) element.style.padding = '12px 6px';
-        element.style.border = '1px solid #fff';
-        element.style.borderRadius = '4px';
-        element.style.background = (active) ? 'rgba(20,150,80,1)' : 'rgba(180,20,20,1)';
+        element.style.border = 'none';
+        element.style.borderRadius = '50%'; // changed to circle
+        element.style.background = (active) ? 'rgba(0, 100, 0, 1)' : 'rgba(180, 20, 20, 1)'; // changed to dark green
         element.style.color = '#fff';
         element.style.font = `normal ${fontSize}px sans-serif`;
         element.style.textAlign = 'center';
@@ -195,14 +195,12 @@ class VRButton{
 
         // Add custom CSS styles
         element.style.cssText += `
-    background: linear-gradient(to bottom, #333, #555);
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    cursor: pointer;
-    `;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      `;
     }
 
 		
