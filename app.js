@@ -51,8 +51,13 @@ class App{
         this.stats = new Stats();
 		container.appendChild( this.stats.dom );
         
-		this.loadingBar = new LoadingBar();
-		
+        this.loadingBar = new LoadingBar();
+
+        this.coins = [];
+        this.obstacles = [];
+        this.score = 0;
+        this.lives = 3;
+
 		this.loadCollege();
         
         this.immersive = false;
@@ -110,22 +115,26 @@ class App{
                 const college = gltf.scene.children[0];
 				self.scene.add( college );
 				
-				college.traverse(function (child) {
-    				if (child.isMesh){
-						if (child.name.indexOf("PROXY")!=-1){
-							child.material.visible = false;
-							self.proxy = child;
-						}else if (child.material.name.indexOf('Glass')!=-1){
+                college.traverse((child) => {
+                    if (child.isMesh) {
+                        if (child.name.indexOf("PROXY") !== -1) {
+                            child.material.visible = false;
+                            this.proxy = child;
+                        } else if (child.material.name.indexOf("Glass") !== -1) {
                             child.material.opacity = 0.1;
                             child.material.transparent = true;
-                        }else if (child.material.name.indexOf("SkyBox")!=-1){
+                        } else if (child.material.name.indexOf("SkyBox") !== -1) {
                             const mat1 = child.material;
-                            const mat2 = new THREE.MeshBasicMaterial({map: mat1.map});
+                            const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
                             child.material = mat2;
                             mat1.dispose();
+                        } else if (child.name.indexOf("Coin") !== -1) {
+                            this.coins.push(child);
+                        } else if (child.name.indexOf("Obstacle") !== -1) {
+                            this.obstacles.push(child);
                         }
-					}
-				});
+                    }
+                });
                        
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
@@ -206,7 +215,33 @@ class App{
         this.ui = new CanvasUI( content, config );
         this.scene.add( this.ui.mesh );
         
-        this.renderer.setAnimationLoop( this.render.bind(this) );
+        this.renderer.setAnimationLoop(this.render.bind(this));
+
+        render(timestamp, frame) {
+            const dt = this.clock.getDelta();
+
+            if (this.renderer.xr.isPresenting) {
+                let moveGaze = false;
+
+                if (this.useGaze && this.gazeController !== undefined) {
+                    this.gazeController.update();
+                    moveGaze = (this.gazeController.mode == GazeController.Modes.MOVE);
+                }
+
+                if (this.selectPressed || moveGaze) {
+                    this.moveDolly(dt);
+                    this.checkCollisions();
+                }
+            }
+
+            if (this.immersive != this.renderer.xr.isPresenting) {
+                this.resize();
+                this.immersive = this.renderer.xr.isPresenting;
+            }
+
+            this.stats.update();
+            this.renderer.render(this.scene, this.camera);
+        }
     }
     
     buildControllers( parent = this.scene ){
@@ -315,7 +350,37 @@ class App{
         this.boardShown = name;
     }
 
-	render( timestamp, frame ){
+    checkCollisions() {
+        const dollyPos = this.dolly.getWorldPosition(new THREE.Vector3());
+
+        for (let i = 0; i < this.coins.length; i++) {
+            const coin = this.coins[i];
+            const coinPos = coin.getWorldPosition(new THREE.Vector3());
+            if (dollyPos.distanceTo(coinPos) < 1) {
+                this.score++;
+                this.coins.splice(i, 1);
+                coin.parent.remove(coin);
+                break;
+            }
+        }
+
+        for (let i = 0; i < this.obstacles.length; i++) {
+            const obstacle = this.obstacles[i];
+            const obstaclePos = obstacle.getWorldPosition(new THREE.Vector3());
+            if (dollyPos.distanceTo(obstaclePos) < 1) {
+                this.lives--;
+                if (this.lives <= 0) {
+                    alert("Game Over! Your score is " + this.score);
+                    this.score = 0;
+                    this.lives = 3;
+                }
+                break;
+            }
+        }
+    }
+}
+
+	/*render( timestamp, frame ){
         const dt = this.clock.getDelta();
         
         if (this.renderer.xr.isPresenting){
@@ -358,6 +423,6 @@ class App{
         this.stats.update();
 		this.renderer.render(this.scene, this.camera);
 	}
-}
+}*/
 
 export { App };

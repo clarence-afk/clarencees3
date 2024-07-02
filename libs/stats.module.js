@@ -111,15 +111,15 @@ Stats.Panel = function (name, fg, bg) {
 	var min = Infinity, max = 0, round = Math.round;
 	var PR = round(window.devicePixelRatio || 1);
 
-	var WIDTH = 80 * PR, HEIGHT = 80 * PR,
+	var WIDTH = 80 * PR, HEIGHT = 48 * PR,
 		TEXT_X = 3 * PR, TEXT_Y = 2 * PR,
-		GRAPH_X = 3 * PR, GRAPH_Y = 3 * PR,
-		GRAPH_RADIUS = 30 * PR;
+		GRAPH_X = 3 * PR, GRAPH_Y = 15 * PR,
+		GRAPH_WIDTH = 74 * PR, GRAPH_HEIGHT = 30 * PR;
 
 	var canvas = document.createElement('canvas');
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
-	canvas.style.cssText = 'width:80px;height:80px';
+	canvas.style.cssText = 'width:80px;height:48px';
 
 	var context = canvas.getContext('2d');
 	context.font = 'bold ' + (9 * PR) + 'px Helvetica,Arial,sans-serif';
@@ -144,17 +144,12 @@ Stats.Panel = function (name, fg, bg) {
 			context.fillStyle = fg;
 			context.fillText(round(value) + ' ' + name + ' (' + round(min) + '-' + round(max) + ')', TEXT_X, TEXT_Y);
 
-			var startAngle = 0;
-			var endAngle = (value / maxValue) * 2 * Math.PI;
-			context.beginPath();
-			context.arc(GRAPH_X + GRAPH_RADIUS, GRAPH_Y + GRAPH_RADIUS, GRAPH_RADIUS, startAngle, endAngle);
+			var graphWidth = (value / maxValue) * GRAPH_WIDTH;
 			context.fillStyle = fg;
-			context.fill();
+			context.fillRect(GRAPH_X, GRAPH_Y, graphWidth, GRAPH_HEIGHT);
 
-			context.beginPath();
-			context.arc(GRAPH_X + GRAPH_RADIUS, GRAPH_Y + GRAPH_RADIUS, GRAPH_RADIUS, endAngle, 2 * Math.PI);
 			context.fillStyle = bg;
-			context.fill();
+			context.fillRect(GRAPH_X + graphWidth, GRAPH_Y, GRAPH_WIDTH - graphWidth, GRAPH_HEIGHT);
 		}
 	};
 };
