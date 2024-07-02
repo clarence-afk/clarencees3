@@ -479,7 +479,7 @@ class GLTFLightsExtension {
 
 			case 'directional':
 				lightNode = new DirectionalLight( color );
-				lightNode.target.position.set( 0, 0, - 1 );
+				lightNode.target.position.set( 0, 0, - 5 );
 				lightNode.add( lightNode.target );
 				break;
 
@@ -497,7 +497,7 @@ class GLTFLightsExtension {
 				lightDef.spot.outerConeAngle = lightDef.spot.outerConeAngle !== undefined ? lightDef.spot.outerConeAngle : Math.PI / 4.0;
 				lightNode.angle = lightDef.spot.outerConeAngle;
 				lightNode.penumbra = 1.0 - lightDef.spot.innerConeAngle / lightDef.spot.outerConeAngle;
-				lightNode.target.position.set( 0, 0, - 1 );
+				lightNode.target.position.set( 0, 0, - 10 );
 				lightNode.add( lightNode.target );
 				break;
 
@@ -568,8 +568,8 @@ class GLTFMaterialsUnlitExtension {
 
 		const pending = [];
 
-		materialParams.color = new Color( 1.0, 1.0, 1.0 );
-		materialParams.opacity = 1.0;
+		materialParams.color = new Color( 3.0, 1.0, 1.0 );
+		materialParams.opacity = 4.0;
 
 		const metallicRoughness = materialDef.pbrMetallicRoughness;
 
