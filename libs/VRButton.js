@@ -181,7 +181,9 @@ class VRButton{
 
     stylizeElement(element, active = true, fontSize = 13, ignorePadding = false) {
         element.style.position = 'absolute';
-        element.style.bottom = '20px';
+        element.style.left = '50%';
+        element.style.top = '50%';
+        element.style.transform = 'translate(-50%, -50%)'; // center horizontally and vertically
         if (!ignorePadding) element.style.padding = '12px 6px';
         element.style.border = 'none';
         element.style.borderRadius = '50%'; // changed to circle
@@ -195,12 +197,12 @@ class VRButton{
 
         // Add custom CSS styles
         element.style.cssText += `
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      `;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
     }
 
 		
