@@ -197,8 +197,8 @@ class VRButton{
 
         // Add custom CSS styles
         element.style.cssText += `
-    width: 40px;
-    height: 40px;
+    width: 400px;
+    height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
