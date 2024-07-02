@@ -179,8 +179,7 @@ class VRButton{
 
     }
 
-    stylizeElement( element, active = true, fontSize = 13, ignorePadding = false ) {
-
+    stylizeElement(element, active = true, fontSize = 13, ignorePadding = false) {
         element.style.position = 'absolute';
         element.style.bottom = '20px';
         if (!ignorePadding) element.style.padding = '12px 6px';
@@ -194,6 +193,16 @@ class VRButton{
         element.style.outline = 'none';
         element.style.zIndex = '999';
 
+        // Add custom CSS styles
+        element.style.cssText += `
+    background: linear-gradient(to bottom, #333, #555);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    `;
     }
 
 		
