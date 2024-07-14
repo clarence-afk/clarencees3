@@ -162,7 +162,12 @@ class App{
         const self = this;
         
         const timeoutId = setTimeout( connectionTimeout, 2000 );
-        
+
+        document.getElementById('adjustCameraButton').addEventListener('click', () => {
+            const newPosition = new THREE.Vector3(0, 2, -5); // Example new position
+            this.adjustCameraPosition(newPosition);
+        });
+
         function onSelectStart( event ) {
         
             this.userData.selectPressed = true;
